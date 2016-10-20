@@ -3,12 +3,24 @@
 
 void RenderScene()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	Matrix4f WorldProj, PersProj,CameraTrans, TrackballTrans, WorldTrans;
+	TrackballTrans.InitIdentity();//=track.RenderMatrix();
+	CameraTrans=cam.RenderMatrix();
+	PersProj.InitPersProjTransform(PersProjInfo(cam.FieldOfView(),WINDOW_WIDTH,WINDOW_HEIGHT,0.1,10000));
+	WorldTrans=TrackballTrans;
+	WorldProj=PersProj*CameraTrans*WorldTrans;            
+
+	glUniformMatrix4fv(gWVPLocation,1,GL_TRUE,&WorldProj.m[0][0]);
+	glUniformMatrix4fv(gWorldLocation,1,GL_TRUE,&WorldTrans.m[0][0]);
+
+
+	glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 
 	glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
     glDisableVertexAttribArray(0);
 
 	GLenum errorCode = glGetError();

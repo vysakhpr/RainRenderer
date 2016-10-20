@@ -17,15 +17,40 @@ const char* pGSFileName = "shader.gs";
 
 
 // Global Variables
-
-GLuint VBO,IBO;
-
-
 #include "include/file_utils.h"
 #include "include/math_utils.h"
+#include "include/camera.h"
+
+GLuint VBO,IBO;
+struct BoundBox
+{
+	Vector3f Center;
+	float XWidth;
+	float YWidth;
+	float ZWidth;
+
+	BoundBox()
+	{
+		
+	}
+	BoundBox(Vector3f v,float x, float y, float z,int i)
+	{
+		Center=v;
+		XWidth=i*x;
+		YWidth=i*y;
+		ZWidth=i*z;
+	}
+}WorldBoundBox;
+
+Camera cam;
+
+
 #include "include/shader.h"
 #include "include/buffer.h"
 #include "include/display_callbacks.h"
+
+
+
 
 static void InitializeDisplayCallbacks()
 {
