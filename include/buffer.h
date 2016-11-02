@@ -4,6 +4,8 @@
 #include  "camera.h"
 void CreateBuffers()
 {
+
+    /*
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 
@@ -17,14 +19,22 @@ void CreateBuffers()
                                1, 3, 2,
                                2, 3, 0,
                                0, 1, 2 };
+    
 
+    Vector3f Vertices[1];
+    Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
+    */
     WorldBoundBox=BoundBox(Vector3f(0,0,0),2,2,2,1);
     cam.SetPosition(Vector3f(0,0,-WorldBoundBox.ZWidth));
+    rain.InitializeParticleSystem(WorldBoundBox);
 
-	glBufferData(GL_ARRAY_BUFFER,sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+    /*
+	glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*rain.number_of_particles, rain.RainDrops, GL_STATIC_DRAW);
+    
 	glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+    */
 }
 
 #endif

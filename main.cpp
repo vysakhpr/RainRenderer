@@ -42,8 +42,9 @@ struct BoundBox
 	}
 }WorldBoundBox;
 
+#include "include/particles.h"
 Camera cam;
-
+ParticleSystem rain;
 
 #include "include/shader.h"
 #include "include/buffer.h"
@@ -55,6 +56,7 @@ Camera cam;
 static void InitializeDisplayCallbacks()
 {
 	glutDisplayFunc(RenderScene);
+	glutIdleFunc(IdleScene);
 }
 
 static void onInit()
