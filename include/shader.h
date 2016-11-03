@@ -4,6 +4,13 @@
 #include <string.h>
 
 GLuint gWorldLocation,gWVPLocation,gCameraViewLocation;
+GLuint DLightColorLocation,DLightAmbientIntensityLocation,DLightDirectionLocation,DLightDiffuseIntensityLocation;
+GLuint gEyeWorldPositionLocation,SpecularIntensityLocation,SpecularPowerLocation;
+GLuint PLightColorLocation, PLightAmbientIntensityLocation, PLightDiffuseIntensityLocation, PLightPositionLocation;
+GLuint PLightAttenuationConstantLocation,PLightAttenuationLinearLocation,PLightAttenuationExpLocation;
+
+
+
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType) {
 	GLuint ShaderObj = glCreateShader(ShaderType);
 
@@ -83,12 +90,54 @@ static void CompileShaders() {
 	gWVPLocation=glGetUniformLocation(ShaderProgram,"gWVP");
 	gWorldLocation=glGetUniformLocation(ShaderProgram,"gWorld");
 	gCameraViewLocation=glGetUniformLocation(ShaderProgram,"gCamera");
+
+
+	DLightColorLocation=glGetUniformLocation(ShaderProgram,"gDirectionalLight.Color");
+	DLightAmbientIntensityLocation=glGetUniformLocation(ShaderProgram,"gDirectionalLight.AmbientIntensity");
+	DLightDirectionLocation=glGetUniformLocation(ShaderProgram,"gDirectionalLight.Direction");
+	DLightDiffuseIntensityLocation=glGetUniformLocation(ShaderProgram,"gDirectionalLight.DiffuseIntensity");
+	gEyeWorldPositionLocation=glGetUniformLocation(ShaderProgram,"gEyeWorldPosition");
+	SpecularIntensityLocation=glGetUniformLocation(ShaderProgram,"gSpecularIntensity");
+	SpecularPowerLocation=glGetUniformLocation(ShaderProgram,"gSpecularPower");
+	PLightPositionLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.Position");
+	PLightColorLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.Color");
+	PLightAmbientIntensityLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.AmbientIntensity");
+	PLightDiffuseIntensityLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.DiffuseIntensity");
+	PLightAttenuationConstantLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.Attenuation.Constant");
+	PLightAttenuationLinearLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.Attenuation.Linear");
+	PLightAttenuationExpLocation=glGetUniformLocation(ShaderProgram,"gPositionalLight.Attenuation.Exponential");
+
+
 	if(	gWVPLocation==0xFFFFFFFF || gWorldLocation==0xFFFFFFFF || gCameraViewLocation==0xFFFFFFFF )
 	{
 		cout<<"Location Cannot be found"<<endl;
 		exit(1);
 	}
 }
+
+void SetLightsInShader(Lighting lights, Camera cam)
+{
+	DirectionalLight DLight=lights.GetDirectionalLight();
+	glUniform3f(DLightColorLocation, DLight.Color.x, DLight.Color.y, DLight.Color.z);
+    glUniform1f(DLightAmbientIntensityLocation, DLight.AmbientIntensity);
+    Vector3f Direction=DLight.Direction;
+    Direction.Normalize();
+    glUniform3f(DLightDirectionLocation,Direction.x,Direction.y,Direction.z);
+    glUniform1f(DLightDiffuseIntensityLocation,DLight.DiffuseIntensity);
+	glUniform3f(gEyeWorldPositionLocation,cam.GetPosition().x,cam.GetPosition().y,cam.GetPosition().z);
+    glUniform1f(SpecularIntensityLocation,1.0f);
+    glUniform1f(SpecularPowerLocation,256);
+    PositionalLight PLight=lights.GetPositionalLight();
+    glUniform3f(PLightColorLocation,PLight.Color.x,PLight.Color.y,PLight.Color.z);
+    glUniform3f(PLightPositionLocation,PLight.Position.x,PLight.Position.y,PLight.Position.z);
+    glUniform1f(PLightDiffuseIntensityLocation,PLight.DiffuseIntensity);
+    glUniform1f(PLightAmbientIntensityLocation, PLight.AmbientIntensity);
+    glUniform1f(PLightAttenuationConstantLocation,PLight.Attenuation.Constant);
+    glUniform1f(PLightAttenuationLinearLocation,PLight.Attenuation.Linear);
+    glUniform1f(PLightAttenuationExpLocation,PLight.Attenuation.Exponential);
+
+}
+
 
 
 #endif

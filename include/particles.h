@@ -52,6 +52,8 @@ class ParticleSystem
 			float Y=((float)rand()/RAND_MAX)*YWidth-YBound;
 			float Z=((float)rand()/RAND_MAX)*ZWidth+ZBound;
 			RainDrops[i].Position=Vector3f(X,Y,Z);
+			RainDrops[i].Normal=Vector3f(X,Y,Z);
+			RainDrops[i].Normal.Normalize();
 			RainDrops[i].InitPosition=Vector3f(X,Y,Z);
 		}
 		glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*number_of_particles, RainDrops, GL_STATIC_DRAW);
@@ -75,9 +77,12 @@ class ParticleSystem
 		glEnableVertexAttribArray(0);
     	glBindBuffer(GL_ARRAY_BUFFER, RBO);
    	 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 48, 0);
+   	 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 48, (const GLvoid*)24);
     	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     	glDrawArrays(GL_POINTS, 0, number_of_particles);
+    	glDisableVertexAttribArray(1);
     	glDisableVertexAttribArray(0);
+
 	}
 
 	~ParticleSystem()

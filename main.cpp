@@ -20,6 +20,7 @@ const char* pGSFileName = "shader.gs";
 #include "include/file_utils.h"
 #include "include/math_utils.h"
 #include "include/camera.h"
+#include "include/trackball.h"
 
 GLuint VBO,IBO;
 struct BoundBox
@@ -43,8 +44,11 @@ struct BoundBox
 }WorldBoundBox;
 
 #include "include/particles.h"
+#include "include/lighting.h"
 Camera cam;
 ParticleSystem rain;
+Lighting lights;
+TrackBall track;
 
 #include "include/shader.h"
 #include "include/buffer.h"
@@ -57,6 +61,8 @@ static void InitializeDisplayCallbacks()
 {
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(IdleScene);
+	glutMotionFunc(onActiveMouseMotion);
+	glutKeyboardFunc(onKeyPress);
 }
 
 static void onInit()
