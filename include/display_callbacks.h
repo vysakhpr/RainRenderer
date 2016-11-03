@@ -12,7 +12,8 @@ void RenderScene()
 
 	glUniformMatrix4fv(gWVPLocation,1,GL_TRUE,&WorldProj.m[0][0]);
 	glUniformMatrix4fv(gWorldLocation,1,GL_TRUE,&WorldTrans.m[0][0]);
-
+	glUniformMatrix4fv(gCameraViewLocation,1,GL_TRUE,&(cam.ViewMatrix()).m[0][0]);
+	//glUniformMatrix4fv(gCameraViewLocation,1,GL_TRUE,&CameraTrans.m[0][0]);
 
 	glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 

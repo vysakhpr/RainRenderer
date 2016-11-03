@@ -6,6 +6,6 @@ uniform mat4 gWorld,gWVP;
 
 void main()
 {
-	gl_Position=gWVP*vec4(Position,1.0);
+	gl_Position=vec4(Position,1.0);
 	mat4 x=gWorld;
 }

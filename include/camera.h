@@ -126,6 +126,13 @@ public:
 		return CameraTrans*CameraTranslateTrans;
 	}
 
+	Matrix4f ViewMatrix()
+	{
+		Matrix4f CameraTrans;
+		CameraTrans.InitCameraTransform(Target,Up);
+		return CameraTrans;
+	}
+
 	void CheckEdges(){
 		if(Locked)
 			return;

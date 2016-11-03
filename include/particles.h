@@ -26,12 +26,13 @@ class ParticleSystem
 	public:
 	Particles* RainDrops;
 	int number_of_particles;
+	float Wind;
 
 	ParticleSystem()
 	{
-		number_of_particles=10000000;
+		number_of_particles=1000;
 		RainDrops = new Particles[number_of_particles];
-		
+		Wind=0.0001;
 	}
 
 	void InitializeParticleSystem(BoundBox boundBox)
@@ -39,12 +40,12 @@ class ParticleSystem
 		box=boundBox;
 		glGenBuffers(1, &RBO);
 		glBindBuffer(GL_ARRAY_BUFFER,RBO);
-		int XWidth=boundBox.XWidth;
-		int YWidth=boundBox.YWidth;
-		int ZWidth=boundBox.ZWidth;
-		int XBound=boundBox.Center.x- XWidth/2;
-		int YBound=boundBox.Center.y- YWidth/2;
-		int ZBound=boundBox.Center.z- ZWidth/2;
+		float XWidth=1.5*boundBox.XWidth;
+		float YWidth=boundBox.YWidth;
+		float ZWidth=boundBox.ZWidth;
+		float XBound=boundBox.Center.x- XWidth/2;
+		float YBound=boundBox.Center.y- YWidth/2;
+		float ZBound=boundBox.Center.z- ZWidth/2;
 		for (int i = 0; i < number_of_particles; ++i)
 		{
 			float X=((float)rand()/RAND_MAX)*XWidth+XBound;
@@ -57,10 +58,11 @@ class ParticleSystem
 	}
 
 	void RainFall()
-	{	
+	{
 		for (int i = 0; i < number_of_particles; ++i)
-		{
+		{		
 			RainDrops[i].Position.y-=(box.YWidth/500);
+			RainDrops[i].Position.x+=Wind;
 			if(RainDrops[i].Position.y<=box.Center.y- box.YWidth/2)
 				RainDrops[i].Position=RainDrops[i].InitPosition;
 		}

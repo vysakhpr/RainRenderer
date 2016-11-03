@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-GLuint gWorldLocation,gWVPLocation;
+GLuint gWorldLocation,gWVPLocation,gCameraViewLocation;
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType) {
 	GLuint ShaderObj = glCreateShader(ShaderType);
 
@@ -82,7 +82,8 @@ static void CompileShaders() {
 	glUseProgram(ShaderProgram);
 	gWVPLocation=glGetUniformLocation(ShaderProgram,"gWVP");
 	gWorldLocation=glGetUniformLocation(ShaderProgram,"gWorld");
-	if(	gWVPLocation==0xFFFFFFFF || gWorldLocation==0xFFFFFFFF )
+	gCameraViewLocation=glGetUniformLocation(ShaderProgram,"gCamera");
+	if(	gWVPLocation==0xFFFFFFFF || gWorldLocation==0xFFFFFFFF || gCameraViewLocation==0xFFFFFFFF )
 	{
 		cout<<"Location Cannot be found"<<endl;
 		exit(1);
