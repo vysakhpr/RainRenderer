@@ -2,6 +2,8 @@
 #define BUFFER_H
 
 #include  "camera.h"
+//#include "include/texture.h"
+
 void CreateBuffers()
 {
 
@@ -24,9 +26,27 @@ void CreateBuffers()
     Vector3f Vertices[1];
     Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
     */
-    WorldBoundBox=BoundBox(Vector3f(0,0,0),2,2,2,1);
-    cam.SetPosition(Vector3f(0,0,-WorldBoundBox.ZWidth));
+    
+    
+    bridge.LoadFile("Bridge/Bridge.x");
+    WorldBoundBox.XWidth*=3;
+    WorldBoundBox.YWidth*=3;
+    WorldBoundBox.ZWidth*=3;
     rain.InitializeParticleSystem(WorldBoundBox);
+    
+    SetTextureInRainShader("sample.png");
+    SetTextureInBridgeShader("Bridge/bridge_color.dds","Bridge/bridge_normal.dds","Bridge/bridge_spec.dds");
+    //SetTextureInBridgeShader("bridge.png");
+    //SetTextureInShader("sample.png");
+    //WorldBoundBox=BoundBox(Vector3f(0,0,0),2,2,2,1);
+    
+    cam.SetPosition(Vector3f(0,1,-1*WorldBoundBox.ZWidth));
+    
+    
+    
+
+    
+
 
     /*
 	glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*rain.number_of_particles, rain.RainDrops, GL_STATIC_DRAW);

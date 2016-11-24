@@ -21,18 +21,20 @@ struct Particles
  
 class ParticleSystem
 {
-	GLuint RBO;
+	GLuint RBO,Texture;
 	BoundBox box;
 	public:
 	Particles* RainDrops;
 	int number_of_particles;
+	int active_particles;
 	float Wind;
 
 	ParticleSystem()
 	{
-		number_of_particles=1000;
+		number_of_particles=500000;
 		RainDrops = new Particles[number_of_particles];
-		Wind=0.0001;
+		active_particles=1000;
+		Wind=0.005;
 	}
 
 	void InitializeParticleSystem(BoundBox boundBox)
@@ -46,6 +48,15 @@ class ParticleSystem
 		float XBound=boundBox.Center.x- XWidth/2;
 		float YBound=boundBox.Center.y- YWidth/2;
 		float ZBound=boundBox.Center.z- ZWidth/2;
+
+		XWidth=XWidth/2;
+		YWidth=YWidth;
+		ZWidth=ZWidth/2;
+		RainBoundBox.XWidth=XWidth;
+		RainBoundBox.YWidth=YWidth;
+		RainBoundBox.ZWidth=ZWidth;
+		//RainBoundBox=WorldBoundBox;
+
 		for (int i = 0; i < number_of_particles; ++i)
 		{
 			float X=((float)rand()/RAND_MAX)*XWidth+XBound;
@@ -59,31 +70,61 @@ class ParticleSystem
 		glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*number_of_particles, RainDrops, GL_STATIC_DRAW);
 	}
 
+	void setTexture(GLuint t)
+	{
+		Texture=t;
+	}
+
+	GLuint getTexture()
+	{
+		return Texture;
+	}
+
 	void RainFall()
 	{
-		for (int i = 0; i < number_of_particles; ++i)
+		for (int i = 0; i < active_particles; ++i)
 		{		
-			RainDrops[i].Position.y-=(box.YWidth/500);
+			RainDrops[i].Position.y-=(box.YWidth/50);
 			RainDrops[i].Position.x+=Wind;
 			if(RainDrops[i].Position.y<=box.Center.y- box.YWidth/2)
 				RainDrops[i].Position=RainDrops[i].InitPosition;
 		}
-		glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*number_of_particles, RainDrops, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,sizeof(Particles)*active_particles, RainDrops, GL_STATIC_DRAW);
 	}
 
 	void RenderRain()
 	{
+		glBindBuffer(GL_ARRAY_BUFFER, RBO);
 		RainFall();
 		glEnableVertexAttribArray(0);
-    	glBindBuffer(GL_ARRAY_BUFFER, RBO);
+		glEnableVertexAttribArray(1);
+    	
    	 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 48, 0);
    	 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 48, (const GLvoid*)24);
     	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    	glDrawArrays(GL_POINTS, 0, number_of_particles);
+    	glDrawArrays(GL_POINTS, 0, active_particles);
     	glDisableVertexAttribArray(1);
     	glDisableVertexAttribArray(0);
 
 	}
+
+	void IncreaseRainFall()
+	{
+		if(active_particles!=400000)
+			active_particles=active_particles+100;		
+	}
+
+	void DecreaseRainFall()
+	{
+		if(active_particles!=0)
+			active_particles=active_particles-100;		
+	}
+
+	int GetActiveParticles()
+	{
+		return active_particles;
+	}
+
 
 	~ParticleSystem()
 	{

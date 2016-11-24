@@ -138,7 +138,7 @@ public:
 		{
 			if(y<=MARGIN)
 				OnUpperEdge=true;
-			else if(y>=WINDOW_HEIGHT-MARGIN)
+			else if(y>=WINDOW_HEIGHT-10*MARGIN)
 				OnLowerEdge=true;	
 		}
 		else

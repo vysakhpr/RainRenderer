@@ -34,7 +34,7 @@ public:
     	OnRightEdge = false;
     	Vector3f HTarget=Vector3f(Target.x,0,Target.z);
     	HTarget.Normalize();
-    	Position=Vector3f(0,0,0);
+    	Position=Vector3f(0,2,0);
     	if(HTarget.z>=0.0f)
     	{
     		if(HTarget.x>=0.0f)

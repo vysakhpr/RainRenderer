@@ -15,12 +15,18 @@ const char* pVSFileName = "shader.vs";
 const char* pFSFileName = "shader.fs";
 const char* pGSFileName = "shader.gs";
 
+const char* bVSFileName = "bridge_shader.vs";
+const char* bFSFileName = "bridge_shader.fs";
+
+
+
 
 // Global Variables
 #include "include/file_utils.h"
 #include "include/math_utils.h"
 #include "include/camera.h"
 #include "include/trackball.h"
+#include <SOIL/SOIL.h>
 
 GLuint VBO,IBO;
 struct BoundBox
@@ -41,14 +47,18 @@ struct BoundBox
 		YWidth=i*y;
 		ZWidth=i*z;
 	}
-}WorldBoundBox;
+}WorldBoundBox,RainBoundBox;
+
 
 #include "include/particles.h"
 #include "include/lighting.h"
+#include "include/bridge.h"
 Camera cam;
 ParticleSystem rain;
 Lighting lights;
 TrackBall track;
+Bridge bridge;
+
 
 #include "include/shader.h"
 #include "include/buffer.h"
@@ -70,6 +80,9 @@ static void onInit()
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	CreateBuffers();
 	CompileShaders();
+	CompileBridgeShaders();
+	//UseRainShaderProgram();
+	//UseBridgeShaderProgram();
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -78,7 +91,7 @@ int main(int argc, char**argv)
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGBA);
 	glutInitWindowSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-	glutInitWindowPosition(100,100);
+	glutInitWindowPosition(500,500);
 	glutCreateWindow("Rain Viewer");
 	InitializeDisplayCallbacks();
 	GLenum res = glewInit();

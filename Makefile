@@ -5,7 +5,7 @@ CFLAGS = -O3 -Wall
 
 INCDIRS = -I. 
 LIBDIRS = -L.
-LIBS = -lGL -lGLEW -lglut -lm
+LIBS = -lSOIL -lassimp -lGL -lGLEW -lglut -lm 
 
 BIN = rain
 SRCS = main.cpp 
@@ -14,7 +14,7 @@ OBJS = main.o
 # compile all '.o' files from their like named '.cpp' files and then link
 #   them into a file name ${BIN}
 ${BIN} : ${OBJS} 
-	${CC} ${OBJS} ${LIBDIRS} ${LIBS} -o $@  
+	${CC} ${OBJS}  ${LIBDIRS} ${LIBS} -o $@  
 .cpp.o :
 	${CC} ${CFLAGS} ${INCDIRS} -c $< 
 
