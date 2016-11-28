@@ -29,9 +29,9 @@ void CreateBuffers()
     
     
     bridge.LoadFile("Bridge/Bridge.x");
-    WorldBoundBox.XWidth*=3;
-    WorldBoundBox.YWidth*=3;
-    WorldBoundBox.ZWidth*=3;
+    WorldBoundBox.XWidth*=1;
+    WorldBoundBox.YWidth*=1;
+    WorldBoundBox.ZWidth*=1;
     rain.InitializeParticleSystem(WorldBoundBox);
     
     SetTextureInRainShader("sample.png");
@@ -40,7 +40,7 @@ void CreateBuffers()
     //SetTextureInShader("sample.png");
     //WorldBoundBox=BoundBox(Vector3f(0,0,0),2,2,2,1);
     
-    cam.SetPosition(Vector3f(0,1,-1*WorldBoundBox.ZWidth));
+    cam.SetPosition(Vector3f(0,1,-3*WorldBoundBox.ZWidth));
     
     
     

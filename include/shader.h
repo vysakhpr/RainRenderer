@@ -9,7 +9,7 @@ GLuint gEyeWorldPositionLocation,SpecularIntensityLocation,SpecularPowerLocation
 GLuint PLightColorLocation, PLightAmbientIntensityLocation, PLightDiffuseIntensityLocation, PLightPositionLocation;
 GLuint PLightAttenuationConstantLocation,PLightAttenuationLinearLocation,PLightAttenuationExpLocation;
 
-GLuint RainBoundBoxLocation;
+GLuint RainBoundBoxLocation,SlopeLocation,OptimizeLocation;
 
 
 GLuint textureLocation,textureBridgeLocation,textureNormalLocation, textureSpecLocation;
@@ -79,6 +79,8 @@ void UseRainShaderProgram()
 	gProjectionLocation=glGetUniformLocation(ShaderProgram,"gProjectionLocation");
 
 	textureLocation=glGetUniformLocation(ShaderProgram,"gRain");
+	SlopeLocation=glGetUniformLocation(ShaderProgram,"gSlope");
+	OptimizeLocation=glGetUniformLocation(ShaderProgram,"gOptimize");
 
 
 	DLightColorLocation=glGetUniformLocation(ShaderProgram,"gDirectionalLight.Color");

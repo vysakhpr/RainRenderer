@@ -36,14 +36,14 @@ public:
 		DLight.Color=Vector3f(1.0,1.0,1.0);
 		DLight.AmbientIntensity=0.1f;
 		DLight.Direction=Vector3f(0.0,0.0,-1.0);
-		DLight.DiffuseIntensity=0.75f;
+		DLight.DiffuseIntensity=0;
 		PLight.Color=Vector3f(1.0,1.0,1.0);
 		PLight.Position=Vector3f(3.7,5.8,3.15);
-		PLight.AmbientIntensity=0.1f;
+		PLight.AmbientIntensity=0.001f;
 		PLight.DiffuseIntensity=0.65f;
-		PLight.Attenuation.Constant=1;
-		PLight.Attenuation.Linear=0.01f;
-		PLight.Attenuation.Exponential=0.001;
+		PLight.Attenuation.Constant=0;
+		PLight.Attenuation.Linear=0.01;
+		PLight.Attenuation.Exponential=0.2;
 		DLightFlag=1;
 		PLightFlag=1;
 	}

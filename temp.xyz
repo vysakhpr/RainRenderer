@@ -1,0 +1,93 @@
+#version 330
+
+layout	(points) in;
+layout	(triangle_strip,max_vertices=16) out;
+
+uniform mat4 gWorld,gWVP;
+uniform mat4 gCamera,gProjectionLocation;
+uniform vec3 rainBoxWidth;
+uniform vec3 gEyeWorldPosition;
+uniform float gSlope;
+
+in vec3 vNormal0[];
+in vec3 vWorldPos0[];
+out vec3 Normal0;
+out vec3 WorldPos0;
+out vec2 texCoord;
+
+vec3 EyePosition=(vec4(gEyeWorldPosition,1.0)).xyz;
+
+void EmitSprites(vec3 va, vec3 vb, vec3 vc, vec3 vd, vec3 Normal)
+{	
+	
+
+	gl_Position= gProjectionLocation*gCamera*vec4(va,1.0);
+	Normal0=normalize((gProjectionLocation*vec4(Normal,1.0)).xyz);
+	WorldPos0=(gWorld*vec4(va,1.0)).xyz;
+	texCoord=vec2(0,0.668);
+	EmitVertex();
+
+	gl_Position= gProjectionLocation*gCamera*vec4(vb,1.0);
+	Normal0=normalize((gProjectionLocation*vec4(Normal,1.0)).xyz);
+	WorldPos0=(gWorld*vec4(vb,1.0)).xyz;
+	texCoord=vec2(0,1);
+	EmitVertex();
+
+	gl_Position= gProjectionLocation*gCamera*vec4(vd,1.0);
+	Normal0=normalize((gProjectionLocation*vec4(Normal,1.0)).xyz);
+	WorldPos0=(gWorld*vec4(vd,1.0)).xyz;
+	texCoord=vec2(1*0.00834,0.668);
+	EmitVertex();
+
+	gl_Position= gProjectionLocation*gCamera*vec4(vc,1.0);
+	Normal0=normalize((gProjectionLocation*vec4(Normal,1.0)).xyz);
+	WorldPos0=(gWorld*vec4(vc,1.0)).xyz;
+	texCoord=vec2(1*0.00834,1);
+	EmitVertex();
+
+    EndPrimitive();	
+}
+
+void main()
+{
+	mat4 w=gWVP;
+	mat4 cam=transpose(gCamera*gWorld);
+	float size=0.001;
+
+	vec3 right= vec3(cam[0][0],cam[1][0],cam[2][0]);
+	vec3 up= vec3(cam[0][1],cam[1][1],cam[2][1]);
+
+	vec3 P = gl_in[0].gl_Position.xyz;
+	
+	vec3 Normal=normalize(cross(up,right));
+	
+	vec3 va = P - (right + 64*up) * size+vec3(gSlope,0,0);
+	vec3 vb = P - (right - 64*up) * size;
+	vec3 vd = P + (right - 64*up) * size+vec3(gSlope,0,0);
+	vec3 vc = P + (right + 64*up) * size;
+
+	EmitSprites(va,vb,vc,vd,Normal);
+
+
+	va.x=va.x+rainBoxWidth.x;
+	vb.x=vb.x+rainBoxWidth.x;
+	vc.x=vc.x+rainBoxWidth.x;
+	vd.x=vd.x+rainBoxWidth.x;
+
+	//EmitSprites(va,vb,vc,vd,Normal);
+
+	va.z=va.z+rainBoxWidth.z;
+	vb.z=vb.z+rainBoxWidth.z;
+	vc.z=vc.z+rainBoxWidth.z;
+	vd.z=vd.z+rainBoxWidth.z;
+
+	//EmitSprites(va,vb,vc,vd,Normal);
+
+	va.x=va.x-rainBoxWidth.x;
+	vb.x=vb.x-rainBoxWidth.x;
+	vc.x=vc.x-rainBoxWidth.x;
+	vd.x=vd.x-rainBoxWidth.x;
+
+	//EmitSprites(va,vb,vc,vd,Normal);	
+}
+

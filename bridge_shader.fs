@@ -77,10 +77,10 @@ vec4  CalculatePositionalLight()
 
 	vec4 DiffuseColor,SpecularColor;
 
-	//vec3 Normal=normalize(bNormal0);
-	vec3 Normal = texture(gNormalTexture, bTexCoord0).rgb;
-	Normal = normalize(Normal * 2.0 - 1.0);   
-	Normal = -normalize(TBN * Normal); 
+	vec3 Normal=normalize(bNormal0);
+	//vec3 Normal = texture(gNormalTexture, bTexCoord0).rgb;
+	//Normal = normalize(Normal * 2.0 - 1.0);   
+	//Normal = normalize(TBN * Normal); 
 
 
 	vec4 AmbientColor=vec4(gPositionalLight.Color*gPositionalLight.AmbientIntensity,1.0);
