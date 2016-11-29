@@ -370,7 +370,7 @@ void SetTextureInBridgeShader(string s, string v, string t)
 
 void LoadArrayTexture()
 {
-	int count=180;
+	int count=185,mipmapLayer=2;
     unsigned char * images[count];
     int width, height;
 
@@ -391,12 +391,16 @@ void LoadArrayTexture()
     //images[1]=SOIL_load_image("Drops/2.png", &width, &height, 0, SOIL_LOAD_RGB);  
 
 
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGB, width, height, 2*count);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipmapLayer, GL_RGB, width, height, 2*count);
 
 
     for (int i = 0; i < count; ++i)
     {
-    	glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, count, GL_RGB, GL_UNSIGNED_BYTE, images[i]);
+    	for (int j = 1; j <= mipmapLayer; ++j)
+    	{
+    		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, j-1, 0, 0, i, width/j, height/j, count, GL_RGB, GL_UNSIGNED_BYTE, images[i]);
+    	}
+    	
     }
     
 	//glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, width, height, count, GL_RGB, GL_UNSIGNED_BYTE, images[0]);
@@ -405,7 +409,7 @@ void LoadArrayTexture()
 
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 

@@ -15,7 +15,25 @@ out vec3 Normal0;
 out vec3 WorldPos0;
 out vec2 texCoord;
 
+struct PositionalLight
+{	
+	vec3 Color;
+	vec3 Position;
+	float AmbientIntensity;
+	float DiffuseIntensity;
+	struct 
+	{
+		float Constant;
+		float Linear;
+		float Exponential;
+	}Attenuation;
+};
+
+uniform PositionalLight  gPositionalLight;
+
 vec3 EyePosition=(vec4(gEyeWorldPosition,1.0)).xyz;
+
+
 
 
 void EmitSprites(vec3 va, vec3 vb, vec3 vc, vec3 vd, vec3 Normal)
@@ -53,6 +71,7 @@ void EmitDrop(vec3 P, vec3 up, vec3 right)
 {
 	float size=0.001;
 	vec3 Normal=normalize(cross(up,right));
+	//vec3 Normal=(gWorld*vec4(gPositionalLight.Position-P,1.0);
 	
 	vec3 va = P - (right + 128*up) * size+vec3(gSlope,0,0);
 	vec3 vb = P - (right - 128*up) * size;

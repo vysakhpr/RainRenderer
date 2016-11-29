@@ -119,7 +119,7 @@ class ParticleSystem
 		static int i=0;
 		if(i<100){
 			RainFall();
-			i++;
+			//i++;
 		}
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
