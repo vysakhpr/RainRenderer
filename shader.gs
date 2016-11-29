@@ -25,7 +25,7 @@ void EmitSprites(vec3 va, vec3 vb, vec3 vc, vec3 vd, vec3 Normal)
 	gl_Position= gProjectionLocation*gCamera*vec4(va,1.0);
 	Normal0=normalize((vec4(Normal,1.0)).xyz);
 	WorldPos0=(gWorld*vec4(va,1.0)).xyz;
-	texCoord=vec2(0,0.668);
+	texCoord=vec2(0,0);
 	EmitVertex();
 
 	gl_Position= gProjectionLocation*gCamera*vec4(vb,1.0);
@@ -37,13 +37,13 @@ void EmitSprites(vec3 va, vec3 vb, vec3 vc, vec3 vd, vec3 Normal)
 	gl_Position= gProjectionLocation*gCamera*vec4(vd,1.0);
 	Normal0=normalize((vec4(Normal,1.0)).xyz);
 	WorldPos0=(gWorld*vec4(vd,1.0)).xyz;
-	texCoord=vec2(1*0.00834,0.668);
+	texCoord=vec2(1,0);
 	EmitVertex();
 
 	gl_Position= gProjectionLocation*gCamera*vec4(vc,1.0);
 	Normal0=normalize((vec4(Normal,1.0)).xyz);
 	WorldPos0=(gWorld*vec4(vc,1.0)).xyz;
-	texCoord=vec2(1*0.00834,1);
+	texCoord=vec2(1,1);
 	EmitVertex();
 
     EndPrimitive();	

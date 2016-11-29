@@ -68,16 +68,18 @@ void RenderScene()
 	//glEnable(GL_CULL_FACE);
 
 
-
 	UseBridgeShaderProgram();
-	
+	//BindBridgeTextures();
 	glUniformMatrix4fv(gWVPLocation,1,GL_TRUE,&WorldProj.m[0][0]);
 	glUniformMatrix4fv(gWorldLocation,1,GL_TRUE,&WorldTrans.m[0][0]);
 	SetLightsInShader(lights,cam);
 	bridge.RenderBridge();
 
 	
-	UseRainShaderProgram();
+	UseRainShaderProgram();  
+	//BindRainTextures();
+	glUniform1i(textureLocation,3);
+	glUniform1i(texture,4);
 	glUniform1f(SlopeLocation,rain.getSlope());
 	glUniform1i(OptimizeLocation,rain.IsOptimized());
 	glUniformMatrix4fv(gWVPLocation,1,GL_TRUE,&WorldProj.m[0][0]);

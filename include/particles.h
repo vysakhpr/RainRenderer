@@ -117,9 +117,9 @@ class ParticleSystem
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, RBO);
 		static int i=0;
-		if(i<500){
+		if(i<100){
 			RainFall();
-			//i++;
+			i++;
 		}
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -174,19 +174,25 @@ class ParticleSystem
 	}	
 
 	void OptimizeParticles()
-	{
-		Optimize=1;
-		float temp=active_particles;
-		InitializeParticleSystem(box);
-		active_particles=temp/4;
-	}
+	{	
+		if(Optimize!=1)
+		{
+			Optimize=1;
+			float temp=active_particles;
+			InitializeParticleSystem(box);
+			active_particles=temp/4;
+		}
+	}	
 
 	void UnOptimizeParticles()
 	{
-		Optimize=0;
-		float temp=active_particles;
-		InitializeParticleSystem(box);
-		active_particles=temp*4;
+		if(Optimize!=0)
+		{	
+			Optimize=0;
+			float temp=active_particles;
+			InitializeParticleSystem(box);
+			active_particles=temp*4;
+		}
 	}
 
 	~ParticleSystem()

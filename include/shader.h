@@ -1,7 +1,9 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string.h>
+#include <string>
+#include <sstream>
+#include <stdio.h>
 
 GLuint gWorldLocation,gWVPLocation,gCameraViewLocation,gProjectionLocation;
 GLuint DLightColorLocation,DLightAmbientIntensityLocation,DLightDirectionLocation,DLightDiffuseIntensityLocation;
@@ -12,7 +14,7 @@ GLuint PLightAttenuationConstantLocation,PLightAttenuationLinearLocation,PLightA
 GLuint RainBoundBoxLocation,SlopeLocation,OptimizeLocation;
 
 
-GLuint textureLocation,textureBridgeLocation,textureNormalLocation, textureSpecLocation;
+GLuint textureLocation,textureBridgeLocation,textureNormalLocation, textureSpecLocation,texture;
 GLuint ShaderProgram;
 GLuint BridgeShaderProgram;
 
@@ -79,6 +81,7 @@ void UseRainShaderProgram()
 	gProjectionLocation=glGetUniformLocation(ShaderProgram,"gProjectionLocation");
 
 	textureLocation=glGetUniformLocation(ShaderProgram,"gRain");
+	texture=glGetUniformLocation(ShaderProgram,"gTexArray");
 	SlopeLocation=glGetUniformLocation(ShaderProgram,"gSlope");
 	OptimizeLocation=glGetUniformLocation(ShaderProgram,"gOptimize");
 
@@ -265,13 +268,13 @@ void SetTextureInRainShader(string s)
     int width, height;
     unsigned char* image;
 
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, textureLocation);
     image = SOIL_load_image(s.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        SOIL_free_image_data(image);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    SOIL_free_image_data(image);
     
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, textureLocation);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -364,6 +367,56 @@ void SetTextureInBridgeShader(string s, string v, string t)
 
 }
 
+
+void LoadArrayTexture()
+{
+	int count=180;
+    unsigned char * images[count];
+    int width, height;
+
+    glEnable(GL_TEXTURE_3D);
+    glGenTextures(1,&texture);
+    
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+
+    for (int i = 0; i < count; ++i)
+    {
+    	stringstream out;
+        out<<i+1;
+        string k=("Drops/"+out.str()+".png");
+    	images[i]=SOIL_load_image(k.c_str(), &width, &height, 0, SOIL_LOAD_RGB);  	
+    }
+    //images[0]=SOIL_load_image("Drops/1.png", &width, &height, 0, SOIL_LOAD_RGB);  
+    //images[1]=SOIL_load_image("Drops/2.png", &width, &height, 0, SOIL_LOAD_RGB);  
+
+
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGB, width, height, 2*count);
+
+
+    for (int i = 0; i < count; ++i)
+    {
+    	glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, count, GL_RGB, GL_UNSIGNED_BYTE, images[i]);
+    }
+    
+	//glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, width, height, count, GL_RGB, GL_UNSIGNED_BYTE, images[0]);
+	//glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 1, width, height, count, GL_RGB, GL_UNSIGNED_BYTE, images[1]);
+	
+
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+    for (int i = 0; i < count; ++i)
+    {
+    	SOIL_free_image_data(images[i]);
+    }
+
+
+}
+
 void SetLightsInShader(Lighting lights, Camera cam)
 {
 	DirectionalLight DLight=lights.GetDirectionalLight();
@@ -386,7 +439,5 @@ void SetLightsInShader(Lighting lights, Camera cam)
     glUniform1f(PLightAttenuationExpLocation,PLight.Attenuation.Exponential);
 
 }
-
-
 
 #endif

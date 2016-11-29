@@ -33,9 +33,11 @@ void CreateBuffers()
     WorldBoundBox.YWidth*=1;
     WorldBoundBox.ZWidth*=1;
     rain.InitializeParticleSystem(WorldBoundBox);
+    LoadArrayTexture();
     
-    SetTextureInRainShader("sample.png");
     SetTextureInBridgeShader("Bridge/bridge_color.dds","Bridge/bridge_normal.dds","Bridge/bridge_spec.dds");
+
+    SetTextureInRainShader("Drops/90.png");
     //SetTextureInBridgeShader("bridge.png");
     //SetTextureInShader("sample.png");
     //WorldBoundBox=BoundBox(Vector3f(0,0,0),2,2,2,1);

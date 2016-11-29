@@ -1,0 +1,43 @@
+
+void LoadTextureArray(string s)
+{
+     //texture=glGetUniformLocation(ShaderProgram,"gTexArray");
+     int count=1;
+     GLuint texels[1];
+     unsigned char * images[count];
+     int width, height;
+     
+     for (int i = 0; i < count; ++i)
+     {
+          //cout<<s+out.str()<<endl;
+          stringstream out;
+          out<<i;
+          string k=(s+out.str()+".png");
+          images[i]=SOIL_load_image("sample.bmp", &width, &height, 0, SOIL_LOAD_RGB);     
+          texels[i]=SOIL_load_OGL_texture("sample.bmp",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);  
+          //cout<<texels[i]<<endl;
+     }
+
+     glGenTextures(1,&texture);
+     //glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+     //glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+     //cout<<width<<height<<endl;
+     //glTexStorage3D(GL_TEXTURE_2D_ARRAY, 10, GL_RGBA8, width, height, count);
+     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width, height, count,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);    
+     glActiveTexture(GL_TEXTURE3);
+     glBindTexture(GL_TEXTURE_2D_ARRAY,texture);
+     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, width, height, count, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+     
+     glBindTexture(GL_TEXTURE_2D_ARRAY,texture);
+     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+
+     //for (int j = 1; j <= 10; ++j)
+     //{
+     //glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width/j, height/j, count,0,GL_RGBA,GL_UNSIGNED_BYTE,0); 
+     //}
+     
+     
+}

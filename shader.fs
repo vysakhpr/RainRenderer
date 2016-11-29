@@ -5,6 +5,7 @@ out vec4 FragColor;
 in vec2 texCoord;
 
 uniform sampler2D gRain;
+uniform sampler2DArray gTexArray;
 uniform mat4 gWorld;
 
 
@@ -101,8 +102,9 @@ vec4  CalculatePositionalLight()
 void main()
 {
 	vec4 TotalLight=CalculateDirectionalLight()+CalculatePositionalLight();
-	//FragColor= vec4(texture2D(gRain,texCoord).rgb,1.0)*TotalLight;
-	FragColor= vec4(1.0,1.0,1.0,1.0)*TotalLight;
+	//FragColor= vec4(texture2D(gTexArray,texCoord).rgb,1.0);
+	FragColor= vec4(texture2DArray(gTexArray,vec3(texCoord,1)).rgb,1.0)*TotalLight;
+	//FragColor= vec4(1.0,1.0,1.0,1.0)*TotalLight;
 	//FragColor= vec4(1.0,1.0,1.0,1.0);
 
 }
